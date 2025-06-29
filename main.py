@@ -1,11 +1,24 @@
 
 # Flask + Twilio + GPT + Zapier + Voice Menu
-from flask import Flask, request
+from flask import Flask, request, Response
 from twilio.twiml.voice_response import VoiceResponse, Gather
+
 from twilio.twiml.messaging_response import MessagingResponse
 import openai, os, requests, datetime
 
 app = Flask(__name__)
+@app.route("/webhook/voice", methods=["POST"])
+def voice_webhook():
+    response = VoiceResponse()
+    gather = Gather(num_digits=1, action="/webhook/language", method="POST", timeout=5)
+    gather.say("Welcome to Joo Family Clinic. For English, press 1. For Korean, press 2. For Spanish, press 3.", language="en-US")
+    response.append(gather)
+    response.redirect("/webhook/voice")
+    return Response(str(response), mimetype="text/xml")
+
+# Include this!
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=3000)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 zapier_url = os.getenv("ZAPIER_URL")  # from Zapier webhook trigger
