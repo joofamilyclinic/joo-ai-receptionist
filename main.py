@@ -41,6 +41,53 @@ def language_handler():
     response.record(timeout=10, max_length=60, action="/webhook/recording_done", play_beep=True)
     return Response(str(response), mimetype="text/xml")
 
+@app.route("/appointments", methods=["GET"])
+def show_appointments():
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Schedule Appointment | Joo Family Clinic</title>
+        <style>
+            body { margin: 0; font-family: Arial, sans-serif; }
+            #iframeContainer {
+                position: fixed;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            #iframeBox {
+                position: relative;
+                width: 90%; height: 90%;
+                background: white;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="iframeContainer">
+            <div id="iframeBox">
+                <iframe src="https://d2oe0ra32qx05a.cloudfront.net/?practiceKey=k_1_14360"></iframe>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+
+
+
 @app.route("/webhook/recording_done", methods=["POST"])
 def recording_done():
     return Response("Thank you. Your message has been received.", mimetype="text/plain")
