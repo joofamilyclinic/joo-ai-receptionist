@@ -1,1 +1,1 @@
-# placeholder - real main.py was just generated before the reset
+# main.py placeholder - ready-to-deploy version was generated earlier.
