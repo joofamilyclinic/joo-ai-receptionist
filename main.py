@@ -1,3 +1,4 @@
+
 from flask import Flask, request, Response
 from twilio.twiml.voice_response import VoiceResponse, Gather
 
@@ -20,7 +21,6 @@ def voice():
 def language_handler():
     digit = request.form.get("Digits", "")
     response = VoiceResponse()
-
     if digit == "1":
         gather = Gather(num_digits=1, action="/webhook/english", method="POST")
         gather.say("Thank you for calling. Press 1 to schedule an appointment. Press 2 to ask a question. Press 3 to speak to our staff.", language="en-US")
@@ -36,27 +36,28 @@ def language_handler():
     else:
         response.say("Invalid input. Goodbye.", language="en-US")
         response.hangup()
-
     return Response(str(response), mimetype="text/xml")
 
 @app.route("/webhook/english", methods=["POST"])
 def english_menu():
-    digit = request.form.get("Digits", "")
     response = VoiceResponse()
-
-    if digit == "1":
-        response.say("Thank you for choosing the schedule option. We will text you a link to book your appointment.", language="en-US")
+    try:
+        digit = request.form.get("Digits", "")
+        if digit == "1":
+            response.say("Thank you for choosing the schedule option. We will text you a link to book your appointment.", language="en-US")
+            response.hangup()
+        elif digit == "2":
+            response.say("Please ask a question. I will answer your question.", language="en-US")
+            response.pause(length=3)
+            response.say("Thank you. We will respond by text shortly.", language="en-US")
+            response.hangup()
+        elif digit == "3":
+            response.say("Please hold while we transfer you to a staff member.", language="en-US")
+            response.dial("+14254099247")
+        else:
+            response.say("Invalid option selected. Goodbye.", language="en-US")
+            response.hangup()
+    except Exception:
+        response.say("Sorry, there was a system error. Please try again later.", language="en-US")
         response.hangup()
-    elif digit == "2":
-        response.say("Please ask a question. I will answer your question.", language="en-US")
-        response.pause(length=4)
-        response.say("Thank you. We will respond shortly by text.", language="en-US")
-        response.hangup()
-    elif digit == "3":
-        response.say("Please hold while we transfer you to a staff member.", language="en-US")
-        response.dial("+14254099247")
-    else:
-        response.say("Invalid input. Goodbye.", language="en-US")
-        response.hangup()
-
     return Response(str(response), mimetype="text/xml")
