@@ -1,0 +1,5 @@
+# main application file
+from flask import Flask, request, Response
+from twilio.twiml.voice_response import VoiceResponse, Gather
+
+app = Flask(_Joo_AI_Receptionist__)  #425-217-3232 ? THIS MUST EXIST AT THE GLOBAL LEVEL
