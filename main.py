@@ -1,1 +1,2 @@
-# main.py with corrected pronunciation for 'Joo' as 'Zoo'
+# main.py with corrected pronunciation for 'Joo' as 'Jew'
+app = Flask(__name__)
