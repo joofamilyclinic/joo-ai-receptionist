@@ -19,3 +19,4 @@ def voice_webhook():
     response.append(gather)
     response.redirect("/webhook/voice")
     return Response(str(response), mimetype="text/xml")
+app = Flask(__name__)
