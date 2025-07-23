@@ -1,3 +1,4 @@
+
 from flask import Flask, request, Response
 from twilio.twiml.voice_response import VoiceResponse, Gather
 
@@ -11,14 +12,22 @@ def home():
 def voice_webhook():
     response = VoiceResponse()
     gather = Gather(num_digits=1, action="/webhook/language", method="POST", timeout=5)
-    gather.say("Welcome to Joo Family Clinic. For English, press 1. For Korean, press 2. For Spanish, press 3.", language="en-US")
+    gather.say("Welcome to Jew Family Clinic. For English, press 1. For Korean, press 2. For Spanish, press 3.", language="en-US")
     response.append(gather)
     response.redirect("/webhook/voice")
     return Response(str(response), mimetype="text/xml")
 
-# Dummy language handler for safe build (you can expand this later)
 @app.route("/webhook/language", methods=["POST"])
 def language_handler():
+    digit = request.form.get("Digits", "")
     response = VoiceResponse()
-    response.say("This is the language handler. Thank you!", language="en-US")
+    if digit == "1":
+        response.redirect("/webhook/english")
+    elif digit == "2":
+        response.redirect("/webhook/korean")
+    elif digit == "3":
+        response.redirect("/webhook/spanish")
+    else:
+        response.say("Invalid input. Returning to the main menu.", language="en-US")
+        response.redirect("/webhook/voice")
     return Response(str(response), mimetype="text/xml")
