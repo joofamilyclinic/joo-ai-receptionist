@@ -18,3 +18,11 @@ def language_handler():
         response.redirect("/webhook/voice")
 
     return Response(str(response), mimetype="text/xml")
+@app.route("/webhook/english", methods=["POST"])
+def english_handler():
+    response = VoiceResponse()
+    gather = Gather(num_digits=1, action="/webhook/english-option", method="POST", timeout=5)
+    gather.say("Welcome to Jew Family Clinic. For appointments, press 1. To ask a question, press 2. To speak with staff, press 3.", language="en-US")
+    response.append(gather)
+    response.redirect("/webhook/english")
+    return Response(str(response), mimetype="text/xml")
